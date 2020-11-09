@@ -1,7 +1,19 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import { store } from './stores'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+
+// import axios from 'axios'
+// axios.defaults.baseURL = 'https://corporatecontacts.club/LAMPAPI'
+
+Vue.use(Vuex)
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 
 Vue.config.productionTip = false
 
