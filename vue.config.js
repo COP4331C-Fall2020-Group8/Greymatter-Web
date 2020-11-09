@@ -4,7 +4,7 @@ module.exports = {
     devServer: {
       proxy: {
         '/api': {
-          target: 'https://corporatecontacts.club/LAMPAPI',
+          target: 'https://localhost:8080',//'https://corporatecontacts.club/LAMPAPI',
           pathRewrite: { '^/api': '' },
           changeOrigin: true,
           secure: false
