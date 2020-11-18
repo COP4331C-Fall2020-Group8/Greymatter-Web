@@ -4,7 +4,7 @@ module.exports = {
     devServer: {
       proxy: {
         '/api': {
-          target: 'https://localhost:8080',//'https://corporatecontacts.club/LAMPAPI',
+          target: 'http://localhost:3000/api',//'https://grey-matter-backend.herokuapp.com/api',
           pathRewrite: { '^/api': '' },
           changeOrigin: true,
           secure: false

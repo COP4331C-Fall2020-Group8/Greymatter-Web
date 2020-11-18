@@ -9,7 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 
 // import axios from 'axios'
-// axios.defaults.baseURL = 'https://corporatecontacts.club/LAMPAPI'
+// axios.defaults.baseURL = 'https://grey-matter-backend.herokuapp.com/api'
 
 Vue.use(Vuex)
 Vue.use(BootstrapVue)

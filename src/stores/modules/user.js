@@ -26,7 +26,7 @@ export default {
     LOGIN: ({ commit }, payload) => {
       return new Promise((resolve, reject) => {
         axios
-          .post('api/Login.php', payload)
+          .post('/api/login', payload)
           .then((response) => {
             if (response.data.results) {
               commit('setLoggedIn', true)
@@ -49,11 +49,11 @@ export default {
     SIGNUP: ({ commit }, payload) => {
       return new Promise((resolve, reject) => {
         axios
-          .post('api/createUser.php', payload)
+          .post('/api/register', payload)
           .then((response) => {
             if (response.data.results) {
               commit('setLoggedIn', true)
-              commit('setUserID', response.data.results.ID)
+              // commit('setUserID', response.data.results.ID)
               resolve(true)
               console.log('SUCCESS' + response.data.results)
               return

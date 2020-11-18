@@ -3,15 +3,15 @@
     <div class="login">
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
-          :state="userNameState"
+          :state="idState"
           label="Username"
           label-for="user-input"
           invalid-feedback="Username is required"
         >
           <b-form-input
-            id="username-input"
-            v-model="username"
-            :state="userNameState"
+            id="id-input"
+            v-model="id"
+            :state="idState"
             required
           >
           </b-form-input>
@@ -54,6 +54,7 @@
 // Anytime I make a call to the api, I need to include the
 // userID from state.
 import Sigining from '../layouts/Signing.vue'
+import axios from 'axios'
 export default {
   name: 'login',
   components: {
@@ -62,9 +63,9 @@ export default {
   data () {
     return {
       userId: 0,
-      username: '',
+      id: '',
       password: '',
-      userNameState: null,
+      idState: null,
       passwordState: null,
       fail: false,
       pass: false,
@@ -74,18 +75,42 @@ export default {
     }
   },
   methods: {
+    // login () {
+    //   if (!this.fail || (this.id !== '' && this.password !== ''))  {
+    //     this.$store.dispatch('user/LOGIN', {
+    //       id: this.id,
+    //       password: this.password
+    //     })
+    //       .then(response => {
+    //         this.pass = true
+    //         this.$router.push('/contacts')
+    //       })
+    //       .catch((error) => {
+    //         if (error) console.log('Login catch errors: ' + error)
+    //         this.fail = true
+    //         vm.$forceUpdate();
+    //       })
+    //   }
+    // },
     login () {
-      if (!this.fail || (this.username !== '' && this.password !== ''))  {
-        this.$store.dispatch('user/LOGIN', {
-          username: this.username,
+      if (!this.fail || (this.id !== '' && this.password !== ''))  {
+        var postData = {
+          id: this.id,
           password: this.password
-        })
+        }
+        axios
+          .post('/api/login', postData)
           .then(response => {
-            this.pass = true
-            this.$router.push('/contacts')
+            if (response.status == 200)
+              console.log('SUCCESS ' + response.data.results)
+              this.$store.commit('user/setLoggedIn', true)
+              // this.$store.commit('setUserID', response.data.results.ID)
+              this.pass = true
+              this.$router.push('/home')
           })
           .catch((error) => {
             if (error) console.log('Login catch errors: ' + error)
+            this.$store.commit('user/setLoggedIn', false)
             this.fail = true
             vm.$forceUpdate();
           })

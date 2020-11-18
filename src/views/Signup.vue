@@ -4,7 +4,7 @@
       <form>
         <div class="form-group">
           <label>Username</label>
-          <input v-model="username" type="text" class="form-control form-control-lg"/>
+          <input v-model="id" type="text" class="form-control form-control-lg"/>
         </div>
         <div class="form-group">
           <label>Full Name</label>
@@ -40,13 +40,14 @@
 
 <script>
 import Signing from '../layouts/Signing.vue'
+import axios from 'axios'
 export default {
   name: 'signup',
   components: {
     Signing
   },
   data: () => ({
-    username: '',
+    id: '',
     name: '',
     email: '',
     password: '',
@@ -55,25 +56,57 @@ export default {
     pass: false
   }),
   methods: {
+    // signup () {     
+    //   if (this.id !== ''){
+    //     if (this.password === this.confirmPassword) {
+    //       this.$store.dispatch('user/SIGNUP', {
+    //         id: this.id,
+    //         name: this.name,
+    //         password: this.password,
+    //         email: this.email,
+    //       })
+    //         .then(success => {
+    //           this.$router.push('/home')
+    //         })
+    //         .catch((error) => {
+    //           if (error) console.log(error)
+    //           this.fail = true
+    //           console.log('Here!!! ' + error)
+    //         })
+    //     } else { this.fail = true }
+    //   } else { this.fail = true }  
+    // },
     signup () {     
-      if (this.username !== ''){
+      if (this.id !== ''){
         if (this.password === this.confirmPassword) {
-          this.$store.dispatch('user/SIGNUP', {
-            username: this.username,
+          var postData = {
+            id: this.id,
             name: this.name,
-            email: this.email,
             password: this.password,
-          })
-            .then(success => {
-              this.$router.push('/home')
+            email: this.email,
+          }
+          axios
+            .post('/api/register', postData)
+            .then(response => {
+              if (response.status == 200)
+                console.log('SUCCESS ' + response.data.results)
+                this.$store.commit('user/setLoggedIn', true)
+                // this.$store.commit('user/setUserID', -1)
+                this.$router.push('/home')
             })
             .catch((error) => {
               if (error) console.log(error)
               this.fail = true
-              console.log('Here!!! ' + error)
+              this.$store.commit('user/setLoggedIn', false)
+              console.log('Here! ' + error)
             })
         } else { this.fail = true }
       } else { this.fail = true }  
+    },
+    foo(){
+      var obj={
+        _id: 5
+      };
     },
     alertReset () {
       this.fail = false,
