@@ -7,6 +7,7 @@ import { store } from './stores'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import vuetify from './plugins/vuetify';
 
 // import axios from 'axios'
 // axios.defaults.baseURL = 'https://grey-matter-backend.herokuapp.com/api'
@@ -20,5 +21,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')
