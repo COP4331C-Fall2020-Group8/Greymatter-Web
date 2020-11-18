@@ -2,9 +2,12 @@
   <div class= "container">
     <div class="centered">
       <div class="vertical-center">
-        <h1> Grey Matter 
-            <!-- <img src="../../images/CorpContacts.png" style="vertical-align:top" alt=""> -->
+        <h1>  
+            <img src="../assets/brain2.png" style="width:200px;height:200px;" alt="">
         </h1>
+        <h2>
+          Grey Matter
+        </h2>
             <div class="inner-block">
           <slot />
         </div>
@@ -54,7 +57,7 @@
 
   .centered {
     position: fixed;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%,-50%);
   }
@@ -102,6 +105,11 @@
   }
 
   h1 {
+    text-align: center;
+    padding-top: 10%;
+  }
+
+  h2 {
     text-align: center;
     padding-bottom: 2%;
     color: rgb(0, 0, 0);
