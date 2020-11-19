@@ -2,10 +2,12 @@
   <Sigining>
     <div class="login">
       <form ref="form" @submit.stop.prevent="handleSubmit">
+        
         <b-form-group
           :state="idState"
-          label="Username"
           label-for="user-input"
+          label="Username"
+          prepend-icon="mdi-account-circle"
           invalid-feedback="Username is required"
         >
           <b-form-input

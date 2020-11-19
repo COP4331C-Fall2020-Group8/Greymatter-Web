@@ -1,66 +1,89 @@
 <template>
+  
   <Header>
     <div>
-    <!-- <div class="home"> -->
-      <!-- <img alt="Vue logo" src="../assets/logo.png">
-      <HelloWorld msg="Welcome to Your Vue.js App"/> -->
       <div id="flashcard-app" class="container">
+        <b-button v-b-toggle.sidebar-variant>
+          <b-icon icon="chevron-bar-down" aria-hidden="true"></b-icon>
+        </b-button>
+          <b-sidebar id="sidebar-variant" title="Sidebar" bg-variant="light" text-variant="dark" shadow>
+            <div class="px-3 py-1">
+            <b-list-group-item class="d-flex justify-content-between align-items-center">
+              <b-icon icon="person-fill" scale="2" variant="secondary"></b-icon>
+              Profile
+            </b-list-group-item>
+            <b-list-group-item>
+              <b-icon icon="house-door-fill" scale="2" variant="secondary"></b-icon>
+            </b-list-group-item>
+            <b-list-group-item>
+              <b-icon icon="collection-fill" scale="2" variant="secondary"></b-icon>
+            </b-list-group-item>
+            <b-list-group-item>
+              <b-icon icon="book" scale="2" variant="secondary"></b-icon>
+            </b-list-group-item>
+            </div>
+          </b-sidebar>
+          <b-button size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
 
-    <h1>Flashcard App!</h1>
 
-    <div class="flashcard-form">
-      <label for="front">Front
-        <input v-model.trim="newFront" type="text" id="front">
-      </label>
-      <label for="back">Back
-        <input v-on:keypress.enter="addNew" v-model.trim="newBack" type="text" id="back">
-      </label>
-      <button v-on:click="addNew">Add a New Card</button>
-      <span class="error" v-show="error">Oops! Flashcards need a front and a back.</span>
-    </div>
+        <h1>Flashcard App!</h1>
 
-      <ul class="flashcard-list">
-      <li v-for="(card, index) in cards" v-bind:key="index" v-on:click="toggleCard(card)">
-        <transition name="flip">
-          <p class="card" v-if="!card.flipped" key="front">
-            {{card.front}}
-            <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
-          </p>
-          <p class="card" v-else key="back">
-            {{card.back}}
-            <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
-          </p>
-        </transition>
-      </li>
-    </ul> 
-    <!-- Alternative solution -->
-    <!-- <ul class="flashcard-list">
-      <li v-for="(card, index) in cards" v-on:click="toggleCard(card)">
-        <transition name="flip">
-            <p class="card" v-bind:key="card.flipped">
-              {{ card.flipped ? card.back : card.front }}
+        <div class="flashcard-form">
+          <label for="front">Front
+            <input v-model.trim="newFront" type="text" id="front">
+          </label>
+          <label for="back">Back
+            <input v-on:keypress.enter="addNew" v-model.trim="newBack" type="text" id="back">
+          </label>
+          <button v-on:click="addNew">Add a New Card</button>
+          <span class="error" v-show="error">Oops! Flashcards need a front and a back.</span>
+        </div>
+
+        <!-- <ul class="flashcard-list">
+        <li v-for="(card, index) in cards" v-bind:key="index" v-on:click="toggleCard(card)">
+          <transition name="flip">
+            <p class="card" v-if="!card.flipped" key="front">
+              {{card.front}}
               <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
             </p>
-        </transition>
-      </li> 
-    </ul> -->
-    
-  </div>
-      <b-button pill size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
+            <p class="card" v-else key="back">
+              {{card.back}}
+              <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
+            </p>
+          </transition>
+        </li>
+        </ul>  -->
+        <!-- Alternative solution -->
+        <!-- <ul class="flashcard-list">
+          <li v-for="(card, index) in cards" v-bind:key="index" v-on:click="toggleCard(card)">
+            <transition name="flip">
+                <p class="card" v-bind:key="card.flipped">
+                  {{ card.flipped ? card.back : card.front }}
+                  <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
+                </p>
+            </transition>
+          </li> 
+        </ul> -->
+        <Card />
+        <div>
+          <b-button size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
+        </div>
+      </div>
     </div>
   </Header>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-import Header from '../layouts/Header'
+import Header from '../layouts/Header' 
+import Card from '../components/Card'
 import axios from 'axios'
 
 export default {
   name: 'home',
   components: {
-    Header
+    Header,
+    Flashcard,
+    Card
   },
   data () {
     return {
@@ -84,7 +107,7 @@ export default {
           back: this.newBack,
           flipped: false
         });
-        this.newFront = '';
+        this.newFront = ''; 
         this.newBack = '';
         this.error = false;
       }
