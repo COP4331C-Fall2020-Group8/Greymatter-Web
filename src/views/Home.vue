@@ -1,5 +1,4 @@
 <template>
-  
   <Header>
     <div>
       <div id="flashcard-app" class="container">
@@ -74,7 +73,7 @@
 </template>
 
 <script>
-import Header from '../layouts/Header' 
+import Header from '../layouts/Header'
 import Card from '../components/Card'
 import axios from 'axios'
 
@@ -82,7 +81,6 @@ export default {
   name: 'home',
   components: {
     Header,
-    Flashcard,
     Card
   },
   data () {
