@@ -1,6 +1,6 @@
 <template>
   <Sigining>
-    <div class="login">
+    <div>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         
         <b-form-group
@@ -100,13 +100,12 @@ export default {
           id: this.id,
           password: this.password
         }
-        axios
-          .post('/api/login', postData)
+        axios.post('/api/login', postData)
           .then(response => {
             if (response.status == 200)
-              console.log('SUCCESS ' + response.data.results)
+              console.log('Successful login ' + response.data.results)
+              this.$store.commit('user/setUserID', postData.id)
               this.$store.commit('user/setLoggedIn', true)
-              // this.$store.commit('setUserID', response.data.results.ID)
               this.pass = true
               this.$router.push('/home')
           })
@@ -125,8 +124,10 @@ export default {
       this.dismissCountDown = this.dismissSecs
     },
     forceLoginState () {
-      this.$router.push('/home')
       this.$store.commit('user/setLoggedIn', true)
+      this.$store.commit('user/setUserID', this.id)
+      this.$router.push('/home')
+      
     }
   }
 }

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Signup from '../views/Signup.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
+import SetViewer from '../views/SetViewer.vue'
 
 const { store } = require('../stores')
 
@@ -26,7 +27,14 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home
-  }//,
+  },
+  {
+    path: '/home/set/:setID',
+    name: 'setviewer',
+    props: true,
+    component: SetViewer
+  }
+  //,
   // {
     // path: '/cardviewer',
     // name: 'cardviewer',

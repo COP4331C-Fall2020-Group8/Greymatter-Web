@@ -64,30 +64,6 @@ export default {
        }
    },
    methods: {
-    //    submitData () {
-    //         var postData = {
-    //             user_id: this.$store.getters["user/user_log_id"],
-    //             name: this.name,
-    //             category: this.category
-    //         }
-    //         console.log('api/Inserting contact ')
-    //         axios
-    //         .post('addContact.php', postData)
-    //         .then(response => {
-    //             if (response.status == 200) {
-    //             console.log('Successfully added a card' + response.data.results)
-    //             this.card = response.data.results
-    //             this.fetchContacts()
-    //             this.resetModal()
-    //             }
-    //             else if ('error' in response.data) {
-    //             console.log('A 200 Status Error Occured' + response.data.error)
-    //             } 
-    //         })
-    //         .catch((error) => {
-    //             if (error) console.log('Error when adding ' + error)
-    //         })
-    //     },
        resetModal () {
         this.name = ''
         this.nameState = null

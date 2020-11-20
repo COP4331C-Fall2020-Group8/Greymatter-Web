@@ -1,14 +1,18 @@
 <template>
   <Signing>
-    <div class="login">
+    <div>
       <form>
         <div class="form-group">
           <label>Username</label>
           <input v-model="id" type="text" class="form-control form-control-lg"/>
         </div>
         <div class="form-group">
-          <label>Full Name</label>
-          <input v-model="name" type="text" class="form-control form-control-lg"/>
+          <label>First Name</label>
+          <input v-model="name.first" type="text" class="form-control form-control-lg"/>
+        </div>
+                <div class="form-group">
+          <label>Last Name</label>
+          <input v-model="name.last" type="text" class="form-control form-control-lg"/>
         </div>
         <div class="form-group">
           <label for="email">Email Address</label>
@@ -48,7 +52,10 @@ export default {
   },
   data: () => ({
     id: '',
-    name: '',
+    name: {
+      first:'',
+      last:''
+    },
     email: '',
     password: '',
     confirmPassword: '',
@@ -56,49 +63,35 @@ export default {
     pass: false
   }),
   methods: {
-    // signup () {     
-    //   if (this.id !== ''){
-    //     if (this.password === this.confirmPassword) {
-    //       this.$store.dispatch('user/SIGNUP', {
-    //         id: this.id,
-    //         name: this.name,
-    //         password: this.password,
-    //         email: this.email,
-    //       })
-    //         .then(success => {
-    //           this.$router.push('/home')
-    //         })
-    //         .catch((error) => {
-    //           if (error) console.log(error)
-    //           this.fail = true
-    //           console.log('Here!!! ' + error)
-    //         })
-    //     } else { this.fail = true }
-    //   } else { this.fail = true }  
-    // },
     signup () {     
       if (this.id !== ''){
         if (this.password === this.confirmPassword) {
           var postData = {
             id: this.id,
-            name: this.name,
             password: this.password,
+            name: {
+              first: this.name.first,
+              last: this.name.last
+            },
             email: this.email,
           }
           axios
             .post('/api/register', postData)
             .then(response => {
               if (response.status == 200)
-                console.log('SUCCESS ' + response.data.results)
+                console.log('Successful registration ' + response.data.results)
+                this.$store.commit('user/setUserID', postData.id)
                 this.$store.commit('user/setLoggedIn', true)
-                // this.$store.commit('user/setUserID', -1)
                 this.$router.push('/home')
+                alertReset ()
             })
             .catch((error) => {
               if (error) console.log(error)
               this.fail = true
               this.$store.commit('user/setLoggedIn', false)
+                his.$store.commit('user/setUserID', -1)
               console.log('Here! ' + error)
+              alertReset ()
             })
         } else { this.fail = true }
       } else { this.fail = true }  

@@ -2,7 +2,7 @@ module.exports = {
   "devServer": {
     "proxy": {
       "/api": {
-        "target": "http://localhost:3000/api",
+        "target": "https://grey-matter-backend.herokuapp.com/api",
         "pathRewrite": {
           "^/api": ""
         },

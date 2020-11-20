@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
   namespaced: true,
   state: {
-    user_log_id: -1,
+    user_log_id: '-1',
     isLoggedIn: false
   },
   getters: {
@@ -18,8 +18,8 @@ export default {
     setLoggedIn: (state, value) => {
       state.isLoggedIn = value
     },
-    setUserID: (state, ID) => {
-      state.user_log_id = ID
+    setUserID: (state, id) => {
+      state.user_log_id = id
     }
   },
   actions: {

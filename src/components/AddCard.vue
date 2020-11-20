@@ -6,7 +6,7 @@
         id="modal-prevent-closing-add"
         ref="modal"
         title="Add Card"
-        @show="resetModal"
+        @show="openEditModal"
         @hidden="resetModal"
         @ok="submitData()"
         ok-title="Add Card"
@@ -70,57 +70,49 @@ export default {
        }
    },
    methods: {
-    //    submitData () {
-    //         var postData = {
-    //             user_id: this.$store.getters["user/user_log_id"],
-    //             // set_id: this.$store.getters["user/set_id"],
-    //             card = { front: this.front,
-    //                      back: this.back   }
-    //         }
-    //         console.log('api/Inserting contact ')
-    //         axios
-    //         .post('addContact.php', postData)
-    //         .then(response => {
-    //             if (response.status == 200) {
-    //             console.log('Successfully added a card' + response.data.results)
-    //             this.card = response.data.results
-    //             this.fetchContacts()
-    //             this.resetModal()
-    //             }
-    //             else if ('error' in response.data) {
-    //             console.log('A 200 Status Error Occured' + response.data.error)
-    //             } 
-    //         })
-    //         .catch((error) => {
-    //             if (error) console.log('Error when adding ' + error)
-    //         })
-    //     },
-       resetModal () {
-        this.front = ''
-        this.frontState = null
-        this.back = ''
-        this.backState = null     
-        },
-        handleOk (bvModalEvt) {
-            // Prevent modal from closing
-            bvModalEvt.preventDefault()
-            // Trigger submit handler
-            this.handleSubmit()
-        },
-       handleSubmit () {
-        // Exit when the form isn't valid
-        if (!this.checkFormValidity()) {
-          return
-        }
-        this.$nextTick(() => {
-          this.submitData()
-          this.$bvModal.hide('modal-prevent-closing-add')
-          this.$bvModal.hide('modal-prevent-closing-edit')
-        })
-        },
-        openEditModal () {
-            this.$bvModal.show('modal-prevent-closing-edit')
-        },
+     submitData(){
+       axios.post('api/addCard', postData)
+          .then(response => {
+            if (response.status == 200)
+              console.log('SUCCESS ' + response.data.results)
+              this.$store.commit('user/setLoggedIn', true)
+              // this.$store.commit('setUserID', response.data.results.ID)
+              this.pass = true
+              this.$router.push('/home')
+          })
+          .catch((error) => {
+            if (error) console.log('Login catch errors: ' + error)
+            this.$store.commit('user/setLoggedIn', false)
+            this.fail = true
+            vm.$forceUpdate();
+          })
+     },
+    resetModal () {
+      this.front = ''
+      this.frontState = null
+      this.back = ''
+      this.backState = null     
+    },
+    handleOk (bvModalEvt) {
+        // Prevent modal from closing
+        bvModalEvt.preventDefault()
+        // Trigger submit handler
+        this.handleSubmit()
+    },
+    handleSubmit () {
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return
+      }
+      this.$nextTick(() => {
+        this.submitData()
+        this.$bvModal.hide('modal-prevent-closing-add')
+        this.$bvModal.hide('modal-prevent-closing-edit')
+      })
+    },
+    openEditModal () {
+        this.$bvModal.show('modal-prevent-closing-edit')
+    },
    }
 }
 </script>

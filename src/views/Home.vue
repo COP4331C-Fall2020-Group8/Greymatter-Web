@@ -24,52 +24,70 @@
           </b-sidebar>
           <b-button size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
 
-        <Topic />
-        <h1>Flashcard App!</h1>
+        <h1>Home page with sets of Topic</h1>
 
-        <div class="flashcard-form">
-          <label for="front">Front
-            <input v-model.trim="newFront" type="text" id="front">
-          </label>
-          <label for="back">Back
-            <input v-on:keypress.enter="addNew" v-model.trim="newBack" type="text" id="back">
-          </label>
-          <button v-on:click="addNew">Add a New Card</button>
+        <!-- <div>
           <span class="error" v-show="error">Oops! Flashcards need a front and a back.</span>
-        </div>
+        </div> -->
 
-        <!-- <ul class="flashcard-list">
-        <li v-for="(card, index) in cards" v-bind:key="index" v-on:click="toggleCard(card)">
-          <transition name="flip">
-            <p class="card" v-if="!card.flipped" key="front">
-              {{card.front}}
-              <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
-            </p>
-            <p class="card" v-else key="back">
-              {{card.back}}
-              <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
-            </p>
-          </transition>
-        </li>
-        </ul>  -->
-        <!-- Alternative solution -->
-        <!-- <ul class="flashcard-list">
-          <li v-for="(card, index) in cards" v-bind:key="index" v-on:click="toggleCard(card)">
-            <transition name="flip">
-                <p class="card" v-bind:key="card.flipped">
-                  {{ card.flipped ? card.back : card.front }}
-                  <span class="delete-card" v-on:click="cards.splice(index, 1)">X</span>
-                </p>
-            </transition>
-          </li> 
-        </ul> -->
-        <Card />
-        
-        <div>
-          <b-button size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
-        </div>
-        <AddCard/>
-        <NewTopic/>
+        <b-row>
+            <!-- <b-col cols="12">Viewing Topic: {{setData.name}} With {{setData.num_cards}} Cards</b-col> -->
+            <b-col>
+                <b-button v-b-modal.modal-prevent-closing-add>Add Set</b-button>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col sm="12" md="6" lg="4" v-for="(topic,index) in topics" v-bind:key="index">
+                <standard-topic
+                    :front="topic.front"
+                ></standard-topic>
+                <!-- This will be added in the topic card  -->
+                <b-button :href="getLinkForCard(setData._id)">Go To Card</b-button>
+            </b-col>
+        </b-row>
+        <!-- Add Card -->
+        <b-modal
+            id="modal-prevent-closing-add"
+            ref="modal"
+            title="Add Set"
+            @show="resetModal"
+            @hidden="resetModal"
+            @ok="submitSet()"
+            ok-title="Add Set"
+        >
+            <form ref="form" @submit.stop.prevent="handleSubmit">
+            <!-- Name  -->
+            <b-form-group
+                :state="modalData.frontState"
+                label="Topic"
+                label-for="name-input"
+                invalid-feedback="Topic is required"
+            >
+                <b-form-input
+                    id="name-input"
+                    v-model="modalData.name"
+                    :state="modalData.nameState"
+                    required
+                >
+                </b-form-input>
+            </b-form-group>
+            <!-- Category -->
+            <b-form-group
+                :state="modalData.backState"
+                label="Category"
+                label-for="cat-input"
+                invalid-feedback="Category is required"
+            >
+                <b-form-input
+                    id="cat-input"
+                    v-model="modalData.category"
+                    :state="modalData.catState"
+                    required
+                >
+                </b-form-input>
+            </b-form-group>
+           </form>
+        </b-modal>
       </div>
     </div>
   </Header>
@@ -77,55 +95,147 @@
 
 <script>
 import Header from '../layouts/Header'
-import Card from '../components/Card'
-import AddCard from '../components/AddCard'
 import Topic from '../components/Topic'
-import NewTopic from '../components/NewTopic'
 import axios from 'axios'
 
 export default {
-  name: 'home',
-  components: {
-    Header,
-    Card,
-    Topic,
-    AddCard,
-    NewTopic
-  },
-  data () {
-    return {
-    cards: [],
-    newFront: '',
-    newBack: '',
-    error: false
-    }
-  },
-  methods: {
-    toggleCard: function(card){
-      card.flipped = !card.flipped;
+    name: 'home',
+    components: {
+        'standard-topic': Topic
     },
-    addNew: function(){
-      //!this.newFront || !this.newBack also works
-      if(!this.newFront.length || !this.newBack.length){
-        this.error = true;
-      } else {
-        this.cards.push({
-          front: this.newFront,
-          back: this.newBack,
-          flipped: false
-        });
-        this.newFront = ''; 
-        this.newBack = '';
-        this.error = false;
+    data () {
+        return {
+            topicName: null,
+            setID: null,
+            setData: {
+                _id: "",
+                category: "",
+                name: "",
+                num_cards: 0
+            },
+            topics: [],
+            modalData:{
+                name: null,
+                category: null,
+                nameState: null,
+                catState: null
+            }
+        }
+    },
+    methods: {
+        getLinkForCard(cardID){
+            console.log(cardID);
+            return '/home/card/' + cardID;
+        },
+        forceRouterLink(id){
+            this.$router.push({path: '/home/card/' + id });
+        },
+        submitSet(){
+             var postData = {
+                user_id: this.$store.getters["user/user_log_id"],
+                name: this.modalData.name,
+                category: this.modalData.category
+            };
+
+            axios.post('/api/addSet', postData)
+            .then(response => {
+                if (response.status == 200){
+                    console.log("Added Set")
+                    // fetchAllSetsAndSearchForSelfInReturnedSets()
+                    // this.fetchCardsInSet();
+                }else{
+                    // TODO
+
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                // TODO
+            })
+        },
+        fetchAllSetsAndSearchForSelfInReturnedSets(){
+            var postData = {
+                user_id: this.$store.getters["user/user_log_id"],
+                search: ""
+            }
+            axios.post('/api/searchSet', postData)
+            .then(response => {
+                if (response.status == 200){
+                    console.log("All Sets of the user")
+                    console.log(response.data)
+                    this.setData = response.data.results
+                    this.topics = this.setData
+                    // var self = sets.filter((setObj)=>{ return setObj._id == this.setID})
+                    // this.setData = self[0];
+                    console.log(this.topics)
+                }else{
+                    // TODO
+                    console.log("400 error")
+                    console.log(response.data.results);
+                    this.topics = response.data.results;
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                // TODO
+                console.log(response.data.error);
+            })
+        },
+        fetchCardsInSet(){
+            var postData = {
+                user_id: this.$store.getters["user/user_log_id"],
+                search: ""
+            }
+            // axios.post('/api/searchCard', postData)
+            // .then(response => {
+            //     if (response.status == 200){
+            //         this.cards = response.data.results
+            //     }else{
+            //         // TODO
+            //     }
+            // })
+            // .catch((error) => {
+            //     console.log(error)
+            //     // TODO
+            // })
+        },
+        resetModal () {
+            this.modalData = {
+                name: null,
+                category: null,
+                nameState: null,
+                catState: null
+            };  
+        },
+        handleOk (bvModalEvt) {
+            // Prevent modal from closing
+            bvModalEvt.preventDefault()
+            // Trigger submit handler
+            this.handleSubmit()
+        },
+       handleSubmit () {
+            // Exit when the form isn't valid
+            this.$nextTick(() => {
+                this.submitSet()
+                this.$bvModal.hide('modal-prevent-closing-add')
+                this.$bvModal.hide('modal-prevent-closing-edit')
+            })
+        },
+        openEditModal () {
+            this.$bvModal.show('modal-prevent-closing-edit')
+        },
+        logout () {
+          console.log("Here!")
+          this.$store.commit('user/setLoggedIn', false)
+          this.$store.commit('user/setUserID', -1)
+          this.$router.push('/login')
       }
-    }, 
-    logout () {
-      console.log("Here!")
-      this.$store.commit('user/setLoggedIn', false)
-      this.$store.commit('user/setUserID', -1)
-      this.$router.push('/login')
+    },
+    beforeMount(){
+        this.setID = this.$route.params.setID;
+        this.fetchAllSetsAndSearchForSelfInReturnedSets();
+        this.fetchCardsInSet();
     }
-  }
 }
 </script>
 
