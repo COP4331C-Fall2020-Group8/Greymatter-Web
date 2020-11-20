@@ -24,7 +24,7 @@
           </b-sidebar>
           <b-button size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
 
-
+        <Topic />
         <h1>Flashcard App!</h1>
 
         <div class="flashcard-form">
@@ -64,9 +64,12 @@
           </li> 
         </ul> -->
         <Card />
+        
         <div>
           <b-button size="md" variant="dark" @click.prevent="logout()">Logout</b-button>
         </div>
+        <AddCard/>
+        <NewTopic/>
       </div>
     </div>
   </Header>
@@ -75,13 +78,19 @@
 <script>
 import Header from '../layouts/Header'
 import Card from '../components/Card'
+import AddCard from '../components/AddCard'
+import Topic from '../components/Topic'
+import NewTopic from '../components/NewTopic'
 import axios from 'axios'
 
 export default {
   name: 'home',
   components: {
     Header,
-    Card
+    Card,
+    Topic,
+    AddCard,
+    NewTopic
   },
   data () {
     return {
