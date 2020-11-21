@@ -33,7 +33,7 @@
         <b-row>
             <!-- <b-col cols="12">Viewing Topic: {{setData.name}} With {{setData.num_cards}} Cards</b-col> -->
             <b-col>
-                <b-button v-b-modal.modal-prevent-closing-add>Add Set</b-button>
+              <b-button v-b-modal.modal-prevent-closing-add>Add Set</b-button>
             </b-col>
         </b-row>
         <b-row>
@@ -44,7 +44,10 @@
                 ></standard-topic>
                 {{setData}}
                 <!-- This will be added in the topic card  -->
-                <b-button :href="getLinkForCard(setData._id)">Go To Card</b-button>
+                <b-button :href="getLinkForCard(topic._id)">Go To Card</b-button>
+                <!-- <div v-for="(set,index) in topics" v-bind:key="index">
+                  <b-button :href="getLinkForCard(set._id)">Go To Card</b-button>
+                </div> -->
             </b-col>
         </b-row>
         <!-- Add Card -->
@@ -57,7 +60,7 @@
             @ok="submitSet()"
             ok-title="Add Set"
         >
-            <form ref="form" @submit.stop.prevent="handleSubmit">
+          <form ref="form" @submit.stop.prevent="handleSubmit">
             <!-- Name  -->
             <b-form-group
                 :state="modalData.frontState"
@@ -65,28 +68,28 @@
                 label-for="name-input"
                 invalid-feedback="Topic is required"
             >
-                <b-form-input
-                    id="name-input"
-                    v-model="modalData.name"
-                    :state="modalData.nameState"
-                    required
-                >
+              <b-form-input
+                id="name-input"
+                v-model="modalData.name"
+                :state="modalData.nameState"
+                required
+              >
                 </b-form-input>
             </b-form-group>
             <!-- Category -->
             <b-form-group
-                :state="modalData.backState"
-                label="Category"
-                label-for="cat-input"
-                invalid-feedback="Category is required"
+              :state="modalData.backState"
+              label="Category"
+              label-for="cat-input"
+              invalid-feedback="Category is required"
             >
-                <b-form-input
-                    id="cat-input"
-                    v-model="modalData.category"
-                    :state="modalData.catState"
-                    required
-                >
-                </b-form-input>
+              <b-form-input
+                  id="cat-input"
+                  v-model="modalData.category"
+                  :state="modalData.catState"
+                  required
+              >
+              </b-form-input>
             </b-form-group>
            </form>
         </b-modal>
@@ -126,11 +129,11 @@ export default {
     },
     methods: {
         getLinkForCard(setID){
-            console.log(setID);
+            console.log('Current setID' + setID);
             return '/home/set/' + setID;
         },
         forceRouterLink(id){
-            this.$router.push({path: '/home/set/' + id });
+            this.$router.push({path: '/home/set/' + id});
         },
         submitSet(){
              var postData = {
@@ -227,7 +230,7 @@ export default {
             this.$bvModal.show('modal-prevent-closing-edit')
         },
         logout () {
-          console.log("Here!")
+          console.log("Signing out!")
           this.$store.commit('user/setLoggedIn', false)
           this.$store.commit('user/setUserID', -1)
           this.$router.push('/login')

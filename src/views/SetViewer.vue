@@ -1,9 +1,12 @@
 <template>
-    <div>
+    <div class="container">
         <b-row>
             <b-col cols="12">Viewing Topic: {{setData.name}} With {{setData.num_cards}} Cards</b-col>
             <b-col>
                 <b-button v-b-modal.modal-prevent-closing-add>Add Card To Set</b-button>
+            </b-col>
+            <b-col>
+                <b-button size="md" variant="secondary" @click.prevent="home()">Back to Home</b-button>
             </b-col>
         </b-row>
         <b-row>
@@ -193,6 +196,10 @@ export default {
         openEditModal () {
             this.$bvModal.show('modal-prevent-closing-edit')
         },
+        home () {
+            console.log("Heading to home")
+            this.$router.push('/home')
+        }
     },
     beforeMount(){
         this.setID = this.$route.params.setID;
@@ -201,3 +208,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.container {
+  max-width: 100%;
+  padding: 2em;
+}
+</style>
