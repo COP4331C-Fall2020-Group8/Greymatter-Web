@@ -39,8 +39,10 @@
         <b-row>
             <b-col sm="12" md="6" lg="4" v-for="(topic,index) in topics" v-bind:key="index">
                 <standard-topic
-                    :front="topic.front"
+                    :name="topic.name"
+                    :category="topic.category"
                 ></standard-topic>
+                {{setData}}
                 <!-- This will be added in the topic card  -->
                 <b-button :href="getLinkForCard(setData._id)">Go To Card</b-button>
             </b-col>
@@ -123,12 +125,12 @@ export default {
         }
     },
     methods: {
-        getLinkForCard(cardID){
-            console.log(cardID);
-            return '/home/card/' + cardID;
+        getLinkForCard(setID){
+            console.log(setID);
+            return '/home/set/' + setID;
         },
         forceRouterLink(id){
-            this.$router.push({path: '/home/card/' + id });
+            this.$router.push({path: '/home/set/' + id });
         },
         submitSet(){
              var postData = {
@@ -141,7 +143,7 @@ export default {
             .then(response => {
                 if (response.status == 200){
                     console.log("Added Set")
-                    // fetchAllSetsAndSearchForSelfInReturnedSets()
+                    fetchAllSetsAndSearchForSelfInReturnedSets()
                     // this.fetchCardsInSet();
                 }else{
                     // TODO

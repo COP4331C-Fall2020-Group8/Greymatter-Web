@@ -18,7 +18,7 @@
         <b-card-body>
           <b-row>
             <b-col>
-              {{front}}
+              {{name}}
             </b-col>
           </b-row>
           <b-row>
@@ -29,6 +29,7 @@
               </b-btn>
             </b-col> -->
             <b-col>
+              {{category}}
                <b-btn class="buttonOptions" variant="white" @click="editCard()">
                 <b-icon-pencil-square></b-icon-pencil-square>
               </b-btn>
@@ -47,11 +48,11 @@ export default {
       type: Boolean,
       default: ()=>{ return false; }
     },
-    front: {
+    name: {
       type: String,
       default: () =>{ return null; }
     },
-    back: {
+    category: {
       type: String,
       default: () =>{ return null; }
     },
