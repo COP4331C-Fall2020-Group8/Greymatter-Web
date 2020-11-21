@@ -1,22 +1,79 @@
 <template>
-    <div class="container">
-        <b-row>
-            <b-col cols="12">Viewing Topic: {{setData.name}} With {{setData.num_cards}} Cards</b-col>
-            <b-col>
-                <b-button v-b-modal.modal-prevent-closing-add>Add Card To Set</b-button>
+    <div>
+        <b-navbar variant="dark" type="dark">
+            <b-navbar-brand href="#">
+                <b-img src="https://i.ibb.co/QJ3J3Ct/tinybrain.png" class="d-inline-block brand-img" alt="Grey Matter"></b-img>
+                Grey Matter
+            </b-navbar-brand>
+            <b-navbar-nav>
+                <b-button size="sm"  class="my-2 my-sm-0" variant="secondary" @click.prevent="home()">Return To Home</b-button> 
+            </b-navbar-nav>
+            <b-navbar-nav class="ml-auto">
+                <b-nav-form @submit.prevent="">
+                    <b-form-input size="sm" class="mr-sm-2" placeholder="Search"  v-on:keyup.enter="searchCards" v-model="searchTerm"></b-form-input>
+                    <b-button size="sm" class="my-2 my-sm-0" @click="searchCards">Search</b-button>
+                </b-nav-form>
+                <b-nav-item @click.prevent="logout()">Logout</b-nav-item>
+            </b-navbar-nav>
+        </b-navbar>
+        
+        <b-row class="bg-info" align-v="stretch">
+            <b-col cols="10" class="text-left">
+                <span class="set-title ml-3">{{setData.name}}</span><br>
+                <span class="set-sub-title ml-3">{{setData.category}}</span>
             </b-col>
-            <b-col>
-                <b-button size="md" variant="secondary" @click.prevent="home()">Back to Home</b-button>
+            <b-col cols="2" class="text-right align-middle">
+                <span class="set-sub-title mr-3">{{setData.num_cards}} Cards</span></br>
+                <b-button v-if="!quizMode" size="sm" class="mr-3" @click="enableQuizMode">Start Quiz</b-button>
+                <b-button v-else size="sm" class="mr-3" @click="disableQuizMode">End Quiz</b-button>
             </b-col>
         </b-row>
-        <b-row>
+        <b-row v-if="showingSearch" class="bg-dark text-white">
+            <b-col cols="10">
+                <span class="set-sub-title ml-3">Results For: {{searchTerm}}</span>
+            </b-col>
+            <b-col cols="2">
+            <b-button @click="stopSearch">
+                Clear Search
+            </b-button>
+            </b-col>
+        </b-row>
+        
+        <b-row v-if="!quizMode">
             <b-col sm="12" md="6" lg="4" v-for="(card,index) in cards" v-bind:key="index">
                 <standard-card 
+                    :cardID="card._id"
                     :front="card.card.front"
                     :back="card.card.back"
+                    :showEdit="showEditing"
+                    :informParentEdited="childInformUpdate"
+                    :informParentDeleted="childInformDeletion"
                 ></standard-card>
-                <!-- This will be added in the topic card  -->
-                <b-button :href="getLinkForCard(card._id)">Go To Card</b-button>
+            </b-col>
+            <b-col v-if="showEditing" cols="12">
+                <b-card v-b-modal.modal-prevent-closing-add bg-variant="dark" text-variant="white" footer-bg-variant="secondary" header-bg-variant="secondary" >
+                    <template #header >
+                        <h4 class="mb-0 text-center">Add New Card</h4>
+                    </template>
+                <b-card-title class="text-center">
+                    <h1 class="text-success">
+                        <b-icon-plus-circle-fill></b-icon-plus-circle-fill>
+                    </h1>
+                </b-card-title>
+                <b-card-sub-title class="mb-2 text-center">
+                  Click Anywhere To Add A New Card To This Set
+                </b-card-sub-title>
+                <template #footer class="text-center">
+                  Don't Worry, Its Easy
+                </template>
+              </b-card>
+            </b-col>
+        </b-row>
+        <b-row v-else>
+            <b-col>
+                <quiz
+                    :cardSet="cards"
+                ></quiz>
             </b-col>
         </b-row>
         <!-- Add Card -->
@@ -28,6 +85,7 @@
             @hidden="resetModal"
             @ok="submitCard()"
             ok-title="Add Card"
+            ok-variant="success"
         >
             <form ref="form" @submit.stop.prevent="handleSubmit">
             <!-- Front Card -->
@@ -67,15 +125,21 @@
 
 <script>
 import Card from '../components/Card'
+import Quiz from '../components/Quiz'
 import axios from 'axios'
 
 export default {
     name: 'setviewer',
     components: {
-        'standard-card': Card
+        'standard-card': Card,
+        'quiz': Quiz
     },
     data () {
         return {
+            quizMode: false,
+            showEditing: true,
+            searchTerm: null,
+            showingSearch: null,
             topicName: null,
             setID: null,
             setData: {
@@ -94,6 +158,45 @@ export default {
         }
     },
     methods: {
+        enableQuizMode(){
+            this.quizMode = true;
+        },
+        disableQuizMode(){
+            this.quizMode = false;
+        },
+        childInformDeletion(cardID){
+            this.cards = this.cards.filter( (card)=>{ return card._id != cardID;} );
+        },
+        childInformUpdate(cardID, front, back){
+            var selectedCard = this.cards.filter( (card)=>{ return card._id == cardID;} );
+            selectedCard[0].card.front = front;
+            selectedCard[0].card.back = back;
+        },
+        stopSearch(){
+            this.fetchCardsInSet();
+            this.showingSearch = false;
+        },
+        searchCards(){
+            var postData = {
+                set_id: this.setID,
+                search: this.searchTerm
+            }
+            axios.post('/api/searchCard', postData)
+            .then((response) => {
+            if (response.status == 200){
+                this.cards = response.data.results
+                this.showingSearch = true;
+            }else{
+                // TODO
+                console.log("400 error")
+                console.log(response.data.results);
+            }
+            })
+            .catch((error) => {
+            console.log(error)
+            // TODO
+            })
+        },
         getLinkForCard(cardID){
             console.log(cardID);
             return '/home/card/' + cardID;
@@ -188,7 +291,7 @@ export default {
        handleSubmit () {
             // Exit when the form isn't valid
             this.$nextTick(() => {
-                this.submitCard()
+                // this.submitCard()
                 this.$bvModal.hide('modal-prevent-closing-add')
                 this.$bvModal.hide('modal-prevent-closing-edit')
             })
@@ -208,8 +311,25 @@ export default {
     }
 }
 </script>
-
+<style>
+body {
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+}
+.brand-img{
+  max-height: 30px;
+  max-width: 30px;
+}
+</style>
 <style scoped>
+.set-title{
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+.set-sub-title{
+    font-size: 1.25rem;
+    font-weight: 400;
+}
 .container {
   max-width: 100%;
   padding: 2em;
