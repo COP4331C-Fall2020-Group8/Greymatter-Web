@@ -42,8 +42,7 @@
                     :name="topic.name"
                     :category="topic.category"
                 ></standard-topic>
-                {{setData}}
-                <!-- This will be added in the topic card  -->
+                {{topic}}
                 <b-button :href="getLinkForCard(topic._id)">Go To Card</b-button>
                 <!-- <div v-for="(set,index) in topics" v-bind:key="index">
                   <b-button :href="getLinkForCard(set._id)">Go To Card</b-button>
