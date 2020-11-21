@@ -41,6 +41,7 @@
                 <standard-topic
                     :name="topic.name"
                     :category="topic.category"
+                    :_id="topic._id"
                 ></standard-topic>
                 {{topic}}
                 <b-button :href="getLinkForCard(topic._id)">Go To Card</b-button>
@@ -145,7 +146,7 @@ export default {
             .then(response => {
                 if (response.status == 200){
                     console.log("Added Set")
-                    fetchAllSetsAndSearchForSelfInReturnedSets()
+                    this.fetchAllSetsAndSearchForSelfInReturnedSets();
                     // this.fetchCardsInSet();
                 }else{
                     // TODO
@@ -190,18 +191,18 @@ export default {
                 user_id: this.$store.getters["user/user_log_id"],
                 search: ""
             }
-            // axios.post('/api/searchCard', postData)
-            // .then(response => {
-            //     if (response.status == 200){
-            //         this.cards = response.data.results
-            //     }else{
-            //         // TODO
-            //     }
-            // })
-            // .catch((error) => {
-            //     console.log(error)
-            //     // TODO
-            // })
+            axios.post('/api/searchCard', postData)
+            .then(response => {
+                if (response.status == 200){
+                    this.cards = response.data.results
+                }else{
+                    // TODO
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                // TODO
+            })
         },
         resetModal () {
             this.modalData = {
@@ -233,7 +234,36 @@ export default {
           this.$store.commit('user/setLoggedIn', false)
           this.$store.commit('user/setUserID', -1)
           this.$router.push('/login')
-      }
+      }//,
+      // startEdit(topic){
+      //   this.modalData = {
+      //     editname = topic.name,
+      //     editcategory = topic.category
+      //   }
+      // },
+      // editData () {
+      //   var postData = {
+      //     userId: this.$store.getters["user/user_log_id"],
+      //     name: this.modalData.editname,
+      //     category:this.editcategory,
+      //   }
+      //   console.log('Editing Contact')
+      //   axios
+      //     .post('/api/updateSet', postData)
+      //     .then(response => {
+      //         if (response.status == 200){
+      //             console.log("Updated Set")
+      //             this.fetchAllSetsAndSearchForSelfInReturnedSets()
+      //             // this.fetchCardsInSet();
+      //         }else{
+      //             // TOD
+      //         }
+      //     })
+      //     .catch((error) => {
+      //         console.log(error)
+      //         // TODO
+      //         })
+      // }
     },
     beforeMount(){
         this.setID = this.$route.params.setID;
