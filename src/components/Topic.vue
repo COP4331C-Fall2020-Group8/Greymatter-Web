@@ -193,7 +193,9 @@ export default {
         name: this.modalData.name,
         category: this.modalData.category
       };
-      axios.post('/api/updateSet', postData)
+      axios
+      // .post('/api/updateSet', postData)
+      .post('/updateSet', postData)
       .then(response => {
         if (response.status == 200){
           this.$bvModal.hide('modal-edit-topic-' + this._id);
@@ -212,7 +214,9 @@ export default {
       var postData = {
         id: this._id
       };
-      axios.post('/api/removeSet', postData)
+      axios
+      // .post('/api/removeSet', postData)
+      .post('/removeSet', postData)
       .then(response => {
         if (response.status == 200){
           //this.$bvModal.hide('modal-confirm-delete-topic-' + this._id);

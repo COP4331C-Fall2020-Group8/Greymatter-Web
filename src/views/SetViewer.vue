@@ -23,7 +23,7 @@
                 <span class="set-sub-title ml-3">{{setData.category}}</span>
             </b-col>
             <b-col cols="2" class="text-right align-middle">
-                <span class="set-sub-title mr-3">{{setData.num_cards}} Cards</span></br>
+                <span class="set-sub-title mr-3">{{setData.num_cards}} Cards</span>
                 <b-button v-if="!quizMode" size="sm" class="mr-3" @click="enableQuizMode">Start Quiz</b-button>
                 <b-button v-else size="sm" class="mr-3" @click="disableQuizMode">End Quiz</b-button>
             </b-col>
@@ -181,7 +181,9 @@ export default {
                 set_id: this.setID,
                 search: this.searchTerm
             }
-            axios.post('/api/searchCard', postData)
+            axios
+            // .post('/api/searchCard', postData)
+            .post('/searchCard', postData)
             .then((response) => {
             if (response.status == 200){
                 this.cards = response.data.results
@@ -204,9 +206,6 @@ export default {
         forceRouterLink(id){
             this.$router.push({path: '/home/card/' + id });
         },
-        addCard(){
-
-        },
         submitCard(){
              var postData = {
                 user_id: this.$store.getters["user/user_log_id"],
@@ -217,7 +216,9 @@ export default {
                 }
             };
 
-            axios.post('/api/addCard', postData)
+            axios
+            // .post('/api/addCard', postData)
+            .post('/addCard', postData)
             .then(response => {
                 if (response.status == 200){
                     console.log("Added Card")
@@ -261,7 +262,9 @@ export default {
                 set_id: this.setID,
                 search: ""
             }
-            axios.post('/api/searchCard', postData)
+            axios
+            // .post('/api/searchCard', postData)
+            .post('/searchCard', postData)
             .then(response => {
                 if (response.status == 200){
                     this.cards = response.data.results

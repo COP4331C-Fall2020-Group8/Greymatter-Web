@@ -45,6 +45,7 @@
 <script>
 import Signing from '../layouts/Signing.vue'
 import axios from 'axios'
+
 export default {
   name: 'signup',
   components: {
@@ -76,7 +77,8 @@ export default {
             email: this.email,
           }
           axios
-            .post('/api/register', postData)
+            .post('/register', postData)
+            // .post('/api/register', postData)
             .then(response => {
               if (response.status == 200)
                 console.log('Successful registration ' + response.data.results)

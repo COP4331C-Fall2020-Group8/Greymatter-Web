@@ -24,16 +24,6 @@
         </b-col>
       </b-row>
       <div>
-        <!-- <b-row>
-            <b-col>
-              <h1>Welcome back {{this.$store.getters["user/user_log_id"]}}!</h1>
-          </b-col>
-        </b-row> -->
-        <!-- <b-row>
-            <b-col>
-              <b-button v-b-modal.modal-prevent-closing-add>Add Set</b-button>
-            </b-col>
-        </b-row> -->
         <b-row>
             <b-col sm="12" md="6" lg="4" v-for="(topic,index) in topics" v-bind:key="index">
                 <standard-topic
@@ -46,9 +36,6 @@
                     :numCards="topics.length"
                     :cardsInSet="topic.num_cards"
                 ></standard-topic>
-                <!-- <div v-for="(set,index) in topics" v-bind:key="index">
-                  <b-button :href="getLinkForCard(set._id)">Go To Card</b-button>
-                </div> -->
             </b-col>
             <b-col cols="12">
               <b-card v-b-modal.modal-prevent-closing-add bg-variant="dark" text-variant="white" footer-bg-variant="secondary" header-bg-variant="secondary" >
@@ -158,7 +145,9 @@ export default {
         user_id: this.$store.getters["user/user_log_id"],
         search: this.searchTerm
       }
-      axios.post('/api/searchSet', postData)
+      axios
+      // .post('/api/searchSet', postData)
+      .post('/searchSet', postData)
       .then((response) => {
         if (response.status == 200){
           this.topics = response.data.results
@@ -197,7 +186,9 @@ export default {
         name: this.modalData.name,
         category: this.modalData.category
       };
-      axios.post('/api/addSet', postData)
+      axios
+      // .post('/api/addSet', postData)
+      .post('/addSet', postData)
       .then(response => {
         if (response.status == 200){
           console.log("Added Set")
@@ -217,7 +208,9 @@ export default {
           user_id: this.$store.getters["user/user_log_id"],
           search: ""
       }
-      axios.post('/api/searchSet', postData)
+      axios
+      // .post('/api/searchSet', postData)
+      .post('/searchSet', postData)
       .then(response => {
         if (response.status == 200){
           console.log("All Sets of the user")
@@ -245,7 +238,9 @@ export default {
           user_id: this.$store.getters["user/user_log_id"],
           search: ""
         }
-        axios.post('/api/searchCard', postData)
+        axios
+        // .post('/api/searchCard', postData)
+        .post('/api/searchCard', postData)
         .then(response => {
           if (response.status == 200){
             this.cards = response.data.results

@@ -90,6 +90,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {
   name: 'Card',
   props: {
@@ -148,7 +149,9 @@ export default {
       var postData = {
         id: this.cardID
       };
-      axios.post('/api/removeCard', postData)
+      axios
+      // .post('/api/removeCard', postData)
+      .post('/removeCard', postData)
       .then(response => {
         if (response.status == 200){
           this.$bvModal.hide('verify-delete-' + this.cardID);
@@ -168,7 +171,9 @@ export default {
         front: this.modalData.front,
         back: this.modalData.back
       };
-      axios.post('/api/updateCard', postData)
+      axios
+      // .post('/api/updateCard', postData)
+      .post('/updateCard', postData)
       .then(response => {
         if (response.status == 200){
           this.$bvModal.hide('modal-edit-card-' + this.cardID)

@@ -57,6 +57,7 @@
 // userID from state.
 import Sigining from '../layouts/Signing.vue'
 import axios from 'axios'
+
 export default {
   name: 'login',
   components: {
@@ -77,30 +78,15 @@ export default {
     }
   },
   methods: {
-    // login () {
-    //   if (!this.fail || (this.id !== '' && this.password !== ''))  {
-    //     this.$store.dispatch('user/LOGIN', {
-    //       id: this.id,
-    //       password: this.password
-    //     })
-    //       .then(response => {
-    //         this.pass = true
-    //         this.$router.push('/contacts')
-    //       })
-    //       .catch((error) => {
-    //         if (error) console.log('Login catch errors: ' + error)
-    //         this.fail = true
-    //         vm.$forceUpdate();
-    //       })
-    //   }
-    // },
     login () {
       if (!this.fail || (this.id !== '' && this.password !== ''))  {
         var postData = {
           id: this.id,
           password: this.password
         }
-        axios.post('/api/login', postData)
+        axios
+          // .post('/api/login', postData)
+          .post('/login', postData)
           .then(response => {
             if (response.status == 200)
               console.log('Successful login ' + response.data.results)

@@ -12,10 +12,8 @@ import vuetify from './plugins/vuetify';
 import { EmbedPlugin } from 'bootstrap-vue'
 import { CardPlugin } from 'bootstrap-vue'
 
-
-
-// import axios from 'axios'
-// axios.defaults.baseURL = 'https://grey-matter-backend.herokuapp.com/api'
+import axios from 'axios'
+axios.defaults.baseURL = 'https://grey-matter-backend.herokuapp.com/api'
 
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
