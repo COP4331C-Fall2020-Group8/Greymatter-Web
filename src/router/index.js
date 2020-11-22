@@ -26,13 +26,15 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: { requiresLogin: true }
   },
   {
     path: '/home/set/:setID',
     name: 'setviewer',
     props: true,
-    component: SetViewer
+    component: SetViewer,
+    meta: { requiresLogin: true }
   }
   //,
   // {

@@ -238,7 +238,9 @@ export default {
                 user_id: this.$store.getters["user/user_log_id"],
                 search: ""
             }
-            axios.post('/api/searchSet', postData)
+            axios
+            // .post('/api/searchSet', postData)
+            .post('/searchSet', postData)
             .then(response => {
                 if (response.status == 200){
                     console.log("All Sets")
