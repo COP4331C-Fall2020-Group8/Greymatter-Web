@@ -23,7 +23,7 @@
                 <span class="set-sub-title ml-3">{{setData.category}}</span>
             </b-col>
             <b-col cols="2" class="text-right align-middle">
-                <span class="set-sub-title mr-3">{{setData.num_cards}} Cards</span></br>
+                <span class="set-sub-title mr-3">{{setData.num_cards}} Cards</span>
                 <b-button v-if="!quizMode" size="sm" class="mr-3" @click="enableQuizMode">Start Quiz</b-button>
                 <b-button v-else size="sm" class="mr-3" @click="disableQuizMode">End Quiz</b-button>
             </b-col>
@@ -302,7 +302,13 @@ export default {
         home () {
             console.log("Heading to home")
             this.$router.push('/home')
-        }
+        },
+        logout () {
+        console.log("Signing out!")
+        this.$store.commit('user/setLoggedIn', false)
+        this.$store.commit('user/setUserID', -1)
+        this.$router.push('/login')
+      }
     },
     beforeMount(){
         this.setID = this.$route.params.setID;
