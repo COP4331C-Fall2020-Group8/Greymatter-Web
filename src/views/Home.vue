@@ -240,7 +240,7 @@ export default {
         }
         axios
         // .post('/api/searchCard', postData)
-        .post('/api/searchCard', postData)
+        .post('/searchCard', postData)
         .then(response => {
           if (response.status == 200){
             this.cards = response.data.results

@@ -195,8 +195,7 @@ export default {
         backState: null
       }  
     },
-  },
-  
+  },  
   computed: {
   },
 };
