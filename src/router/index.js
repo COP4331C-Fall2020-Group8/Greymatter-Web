@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Signup from '../views/Signup.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
+import SetViewer from '../views/SetViewer.vue'
 
 const { store } = require('../stores')
 
@@ -26,14 +27,22 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home
-  }//,
+  },
+  {
+    path: '/home/set/:setID',
+    name: 'setviewer',
+    props: true,
+    component: SetViewer
+  }
+  //,
   // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    // path: '/cardviewer',
+    // name: 'cardviewer',
+    // // route level code-splitting
+    // // this generates a separate chunk (about.[hash].js) for this route
+    // // which is lazy-loaded when the route is visited.
+    // // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    // component: CardViewer
   // }
 ]
 

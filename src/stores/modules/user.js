@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
   namespaced: true,
   state: {
-    user_log_id: -1,
+    user_log_id: '-1',
     isLoggedIn: false
   },
   getters: {
@@ -18,15 +18,15 @@ export default {
     setLoggedIn: (state, value) => {
       state.isLoggedIn = value
     },
-    setUserID: (state, ID) => {
-      state.user_log_id = ID
+    setUserID: (state, id) => {
+      state.user_log_id = id
     }
   },
   actions: {
     LOGIN: ({ commit }, payload) => {
       return new Promise((resolve, reject) => {
         axios
-          .post('api/Login.php', payload)
+          .post('/api/login', payload)
           .then((response) => {
             if (response.data.results) {
               commit('setLoggedIn', true)
@@ -49,11 +49,11 @@ export default {
     SIGNUP: ({ commit }, payload) => {
       return new Promise((resolve, reject) => {
         axios
-          .post('api/createUser.php', payload)
+          .post('/api/register', payload)
           .then((response) => {
             if (response.data.results) {
               commit('setLoggedIn', true)
-              commit('setUserID', response.data.results.ID)
+              // commit('setUserID', response.data.results.ID)
               resolve(true)
               console.log('SUCCESS' + response.data.results)
               return
