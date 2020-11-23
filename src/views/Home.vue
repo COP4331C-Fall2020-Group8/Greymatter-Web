@@ -56,7 +56,7 @@
               </b-card>
             </b-col>
         </b-row>
-        <!-- Add Card -->
+        <!-- Add Topic -->
         <b-modal
             id="modal-prevent-closing-add"
             ref="modal"
@@ -70,7 +70,7 @@
           <form ref="form" @submit.stop.prevent="handleSubmit">
             <!-- Name  -->
             <b-form-group
-                :state="modalData.frontState"
+                :state="modalData.nameState"
                 label="Topic"
                 label-for="name-input"
                 invalid-feedback="Topic is required"
@@ -80,12 +80,12 @@
                 v-model="modalData.name"
                 :state="modalData.nameState"
                 required
-              >
+              >              
                 </b-form-input>
             </b-form-group>
             <!-- Category -->
             <b-form-group
-              :state="modalData.backState"
+              :state="modalData.catState"
               label="Category"
               label-for="cat-input"
               invalid-feedback="Category is required"
@@ -99,8 +99,14 @@
               </b-form-input>
             </b-form-group>
            </form>
-        </b-modal>
+        </b-modal>   
       </div>
+      <b-alert variant="danger" :show="fail" fade @dismissed="fail=false" dismissible>
+          {{errorMessage}}
+        </b-alert>
+        <b-alert variant="success" :show="pass" fade @dismissed="pass=false" dismissible>
+          {{successMessage}}
+        </b-alert>
     </div>
 </template>
 
@@ -132,7 +138,11 @@ export default {
             category: null,
             nameState: null,
             catState: null
-        }
+        },
+        errorMessage: '',
+        successMessage: '',
+        fail: false,
+        pass: false
     }
   },
   methods: {
@@ -192,15 +202,20 @@ export default {
       .then(response => {
         if (response.status == 200){
           console.log("Added Set")
-          this.fetchAllSetsAndSearchForSelfInReturnedSets();
+          this.fetchAllSetsAndSearchForSelfInReturnedSets()
+          this.resetModal()
+          this.successMessage = 'Topic Successfully Added!'
+          this.pass = true
           // this.fetchCardsInSet();
         }else{
             // TODO
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error.response)
         // TODO
+        this.errorMessage = error.response.data.error
+        this.fail = true
       })
     },
     fetchAllSetsAndSearchForSelfInReturnedSets(){
@@ -217,8 +232,7 @@ export default {
           console.log(response.data)
           this.setData = response.data.results
           this.topics = this.setData
-          // var self = sets.filter((setObj)=>{ return setObj._id == this.setID})
-          // this.setData = self[0];
+          this.successMessage = 'Topic Successfully Added!'
           console.log(this.topics)
         }else{
           // TODO
@@ -253,6 +267,12 @@ export default {
           // TODO
         })
     },
+    checkFormValidity() {
+        const valid = this.$refs.form.checkValidity()
+        this.modalData.nameState = valid; 
+        this.modalData.catState = valid;
+        return valid
+    },
     resetModal () {
       this.modalData = {
         name: null,
@@ -269,10 +289,13 @@ export default {
     },
     handleSubmit () {
         // Exit when the form isn't valid
+        if (!this.checkFormValidity()) {
+            return
+        }
         this.$nextTick(() => {
-        //this.submitSet()
-        this.$bvModal.hide('modal-prevent-closing-add')
-        this.$bvModal.hide('modal-prevent-closing-edit')
+            this.submitSet()
+            this.$bvModal.hide('modal-prevent-closing-add')
+            this.$bvModal.hide('modal-prevent-closing-edit')
       })
     },
     openEditModal () {

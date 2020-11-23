@@ -293,7 +293,7 @@ export default {
             // Trigger submit handler
             this.handleSubmit()
         },
-       handleSubmit () {
+        handleSubmit () {
             // Exit when the form isn't valid
             this.$nextTick(() => {
                 // this.submitCard()

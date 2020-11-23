@@ -35,10 +35,10 @@
       ok-variant="success"
       cancel-variant="danger"
     >
-      <form ref="form" @submit.stop.prevent="doNothing">
+      <form ref="form" @submit.stop.prevent="handleSubmit">
         
         <b-form-group
-            :state="modalData.frontState"
+            :state="modalData.nameState"
             label="Topic"
             label-for="name-input"
             invalid-feedback="Topic is required"
@@ -53,7 +53,7 @@
         </b-form-group>
         
         <b-form-group
-          :state="modalData.backState"
+          :state="modalData.catState"
           label="Category"
           label-for="cat-input"
           invalid-feedback="Category is required"
@@ -88,149 +88,159 @@
 import axios from 'axios'
 
 export default {
-  name: 'Topic',
-  props: {
-    showEdit:{
-      type: Boolean,
-      default: ()=>{ return false; }
+    name: 'Topic',
+    props: {
+        showEdit:{
+        type: Boolean,
+        default: ()=>{ return false; }
+        },
+        name: {
+        type: String,
+        default: () =>{ return null; }
+        },
+        category: {
+        type: String,
+        default: () =>{ return null; }
+        },
+        _id: {
+        type: String,
+        default: () =>{ return null; }
+        },
+        updateParent: {
+        type: Function
+        },
+        informParentDeleted: {
+        type: Function
+        },
+        numCards: {
+        type: Number,
+        default: ()=>{ return 0; }
+        },
+        cardNum:{
+        type: Number,
+        default: ()=>{return 0; }
+        },
+        cardsInSet:{
+        type: Number,
+        default: ()=>{return 0; }
+        }
     },
-    name: {
-      type: String,
-      default: () =>{ return null; }
-    },
-    category: {
-      type: String,
-      default: () =>{ return null; }
-    },
-    _id: {
-      type: String,
-      default: () =>{ return null; }
-    },
-    updateParent: {
-      type: Function
-    },
-    informParentDeleted: {
-      type: Function
-    },
-    numCards: {
-      type: Number,
-      default: ()=>{ return 0; }
-    },
-    cardNum:{
-      type: Number,
-      default: ()=>{return 0; }
-    },
-    cardsInSet:{
-      type: Number,
-      default: ()=>{return 0; }
-    }
-  },
-  data () {
-    return {
-      showFront: true,
-      title: '',
-      description: '',
-      modalData:{
-        name: null,
-        category: null,
-        nameState: null,
-        catState: null
-      }
-    }
-  },
-  methods: {
-    getLinkForCard (cardID) {
-      console.log(cardID);
-      return '/home/set/' + cardID;
-    },
-    verifyDelete(){
-      this.$bvModal.show('verify-delete-' + this._id);
-    },
-    doNothing(){
-      return null;
-    },
-    viewTopic(){
-      this.$router.push({path: '/home/set/' + this._id });
-    },
-    forceRouterLink (id) {
-      this.$router.push({path: '/home/card/' + id });
-    },
-    resetModal () {
-          this.modalData = {
+    data () {
+        return {
+        showFront: true,
+        title: '',
+        description: '',
+        modalData:{
             name: null,
             category: null,
             nameState: null,
             catState: null
-          };  
-    },
-    handleOk (bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault()
-      // Trigger submit handler
-      this.handleSubmit()
-    },
-    handleSubmit () {
-       // Exit when the form isn't valid
-       this.$nextTick(() => {
-           //this.submitSet()
-           this.$bvModal.hide('modal-prevent-closing-add')
-           this.$bvModal.hide('modal-prevent-closing-edit')
-       })
-     },
-     openEditModal () {
-       this.$bvModal.show('modal-prevent-closing-edit')
-     },
-     startEdit(){
-        this.modalData = {
-          name: this.name,
-          category: this.category
         }
-        this.$bvModal.show('modal-edit-topic-' + this._id)
-     },
-    submitTopicEdit(){
-      var postData = {
-        id: this._id,
-        name: this.modalData.name,
-        category: this.modalData.category
-      };
-      axios
-      // .post('/api/updateSet', postData)
-      .post('/updateSet', postData)
-      .then(response => {
-        if (response.status == 200){
-          this.$bvModal.hide('modal-edit-topic-' + this._id);
-          this.updateParent(this._id, this.modalData.name, this.modalData.category);
-        }else{
-          // TODO
         }
-      })
-      .catch((error) => {
-        console.log(error)
-        // TODO
-      })
-      
     },
-    deleteSelf(){
-      var postData = {
-        id: this._id
-      };
-      axios
-      // .post('/api/removeSet', postData)
-      .post('/removeSet', postData)
-      .then(response => {
-        if (response.status == 200){
-          //this.$bvModal.hide('modal-confirm-delete-topic-' + this._id);
-          this.informParentDeleted(this._id);
-        }else{
-          // TODO
+    methods: {
+        getLinkForCard (cardID) {
+        console.log(cardID);
+        return '/home/set/' + cardID;
+        },
+        verifyDelete(){
+        this.$bvModal.show('verify-delete-' + this._id);
+        },
+        doNothing(){
+        return null;
+        },
+        viewTopic(){
+        this.$router.push({path: '/home/set/' + this._id });
+        },
+        forceRouterLink (id) {
+        this.$router.push({path: '/home/card/' + id });
+        },
+        checkFormValidity() {
+            const valid = this.$refs.form.checkValidity()
+            this.modalData.nameState = valid 
+            this.modalData.catState = valid
+            // return this.$refs.form.checkValidity()
+            return valid
+        },
+        resetModal () {
+            this.modalData = {
+                name: null,
+                category: null,
+                nameState: null,
+                catState: null
+            };  
+        },
+        handleOk (bvModalEvt) {
+            // Prevent modal from closing
+            bvModalEvt.preventDefault()
+            // Trigger submit handler
+            this.handleSubmit()
+        },
+        handleSubmit () {
+            // Exit when the form isn't valid
+            if (!this.checkFormValidity()) {
+                return
+            }
+            this.$nextTick(() => {
+                //this.submitSet()
+                this.$bvModal.hide('modal-prevent-closing-add')
+                this.$bvModal.hide('modal-prevent-closing-edit')
+            })
+        },
+        openEditModal () {
+            this.$bvModal.show('modal-prevent-closing-edit')
+        },
+        startEdit(){
+            this.modalData = {
+            name: this.name,
+            category: this.category
+            }
+            this.$bvModal.show('modal-edit-topic-' + this._id)
+        },
+        submitTopicEdit(){
+            var postData = {
+                id: this._id,
+                name: this.modalData.name,
+                category: this.modalData.category
+            };
+            axios
+            // .post('/api/updateSet', postData)
+            .post('/updateSet', postData)
+            .then(response => {
+                if (response.status == 200){
+                this.$bvModal.hide('modal-edit-topic-' + this._id);
+                this.updateParent(this._id, this.modalData.name, this.modalData.category);
+                }else{
+                // TODO
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                // TODO
+            })
+        
+        },
+        deleteSelf(){
+            var postData = {
+                id: this._id
+            };
+            axios
+            // .post('/api/removeSet', postData)
+            .post('/removeSet', postData)
+            .then(response => {
+                if (response.status == 200){
+                //this.$bvModal.hide('modal-confirm-delete-topic-' + this._id);
+                this.informParentDeleted(this._id);
+                }else{
+                // TODO
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                // TODO
+            })
         }
-      })
-      .catch((error) => {
-        console.log(error)
-        // TODO
-      })
     }
-  }
 };
 </script>
 

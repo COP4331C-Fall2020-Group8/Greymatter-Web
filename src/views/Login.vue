@@ -2,8 +2,14 @@
   <Sigining>
     <div>
       <form ref="form" @submit.stop.prevent="handleSubmit">
-        
-        <b-form-group
+        <b-col>
+        <b-input-group class="mb-3">
+          <b-input-group-prepend is-text>
+            <b-icon icon="person-fill"></b-icon>
+          </b-input-group-prepend>
+          <b-form-input v-model="id" type="text" placeholder="Username"></b-form-input>
+        </b-input-group>
+        <!-- <b-form-group
           :state="idState"
           label-for="user-input"
           label="Username"
@@ -15,10 +21,20 @@
             v-model="id"
             :state="idState"
             required
-          >
+          > 
           </b-form-input>
-        </b-form-group>
-        <b-form-group
+        </b-form-group> -->
+        
+        <b-input-group class="mb-3">
+          <b-input-group-prepend is-text>
+            <b-icon-lock-fill> </b-icon-lock-fill>
+          </b-input-group-prepend>
+          <b-form-input v-model="password" type="password" placeholder="Password"></b-form-input>
+        </b-input-group>
+
+        </b-col>
+
+        <!-- <b-form-group
           :state="passwordState"
           label="Password"
           label-for="password-input"
@@ -33,28 +49,32 @@
             required
           >
           </b-form-input>
-        </b-form-group>
+        </b-form-group> -->
       </form>
-        <button type="submit" @click.prevent.stop="login()" class="btn btn-dark btn-lg btn-block">Sign In</button>
-        <b-alert variant="danger" v-if="fail" :show="fail" fade @dimssed="fail=false" dismissible>
-          Username or Password are invalid
+        <b-button type="submit" variant="success" @click.prevent.stop="login()" class="mb-3 btn-lg btn-block">Sign In</b-button>
+        <b-alert 
+        variant="danger" 
+        dismissible 
+        :show="fail" 
+        fade 
+        @dismissed="fail=false" 
+        >{{errorMessage}} 
         </b-alert>
-        <b-alert variant="pass" v-if="pass" :show="pass" fade @dimssed="pass=false" dismissible>
+
+        <b-alert variant="pass" :show="pass" fade @dismissed="pass=false" dismissible>
           Succesful login
         </b-alert>
         <p class="forgot-password text-right">
           Don't have an account?
         <router-link :to="{name: 'signup'}">Sign up</router-link>
-        <b-button @click.prevent="forceLoginState()">forceLoginState</b-button>
+        {{fail}}
+        <!-- <b-button @click.prevent="forceLoginState()">forceLoginState</b-button> -->
         </p>
     </div>
   </Sigining>
 </template>
 
 <script>
-// TODO: Manage user ID from login response in state
-// Anytime I make a call to the api, I need to include the
-// userID from state.
 import Sigining from '../layouts/Signing.vue'
 import axios from 'axios'
 
@@ -74,7 +94,8 @@ export default {
       pass: false,
       dismissSecs: 5,
       dismissCountDown: 0,
-      showDismissibleAlert: false
+      showDismissibleAlert: false,
+      errorMessage:''
     }
   },
   methods: {
@@ -88,18 +109,24 @@ export default {
           // .post('/api/login', postData)
           .post('/login', postData)
           .then(response => {
-            if (response.status == 200)
+            if (response.status == 200) {
               console.log('Successful login ' + response.data.results)
               this.$store.commit('user/setUserID', postData.id)
               this.$store.commit('user/setLoggedIn', true)
               this.pass = true
               this.$router.push('/home')
+            }else {
+                console.log('->' + response)
+            }
           })
           .catch((error) => {
-            if (error) console.log('Login catch errors: ' + error)
-            this.$store.commit('user/setLoggedIn', false)
-            this.fail = true
-            vm.$forceUpdate();
+            if (error){ 
+                console.log(error.response)
+                this.$store.commit('user/setLoggedIn', false)
+                this.errorMessage = error.response.data.error
+                this.fail = true
+                // this.resetAlerts()
+            }
           })
       }
     },
@@ -112,8 +139,7 @@ export default {
     forceLoginState () {
       this.$store.commit('user/setLoggedIn', true)
       this.$store.commit('user/setUserID', this.id)
-      this.$router.push('/home')
-      
+      this.$router.push('/home') 
     }
   }
 }
