@@ -12,6 +12,7 @@
                     :front="workingSet[currentIndex].card.front"
                     :back="workingSet[currentIndex].card.back"
                     :showEdit="false"
+                    :showFront="true"
                 ></standard-card>
             </b-col>
             <b-col cols="2" class="text-info">
@@ -28,7 +29,6 @@
                         Un-Shuffle Cards
                     </b-button>
                 </b-button-toolbar>
-                
             </b-col>
         </b-row>        
     </div>
@@ -63,8 +63,7 @@ export default {
         next(){
             this.currentIndex++;
         },
-        last(){
-            
+        last(){            
             this.currentIndex--;
         },
         reset(){

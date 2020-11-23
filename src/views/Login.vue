@@ -68,7 +68,7 @@
           Don't have an account?
         <router-link :to="{name: 'signup'}">Sign up</router-link>
         {{fail}}
-        <!-- <b-button @click.prevent="forceLoginState()">forceLoginState</b-button> -->
+        <b-button @click.prevent="forceLoginState()">forceLoginState</b-button>
         </p>
     </div>
   </Sigining>
@@ -120,12 +120,17 @@ export default {
             }
           })
           .catch((error) => {
-            if (error){ 
+            if (error.response.status == 401){ 
                 console.log(error.response)
                 this.$store.commit('user/setLoggedIn', false)
                 this.errorMessage = error.response.data.error
                 this.fail = true
                 // this.resetAlerts()
+            } else if (error.response.status == 402) {
+              console.log(error.response)
+                this.$store.commit('user/setLoggedIn', false)
+                this.errorMessage = error.response.data.error
+                this.fail = true
             }
           })
       }

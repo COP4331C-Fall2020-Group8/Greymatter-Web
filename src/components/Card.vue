@@ -102,6 +102,10 @@ export default {
       type: Boolean,
       default: ()=>{ return false; }
     },
+    showFront:{
+      type: Boolean,
+      default: ()=>{ return true; }
+    },
     front: {
       type: String,
       default: () =>{ return null; }

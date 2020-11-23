@@ -1,143 +1,135 @@
 <template>
   <Signing>
     <div>
-      <div>
-      <form>
-        
-         <!-- <h3 class="text-center">Create An Account</h3> -->
-        <!-- User Name -->
-        <b-form-group
-          :state="state.username"
-          label="Username"
-          label-for="user-input"
-          invalid-feedback="Username is required"
-        >
-          <b-form-input
-            id="username-input"
-            type="text"
-            v-model="id"
-            :state="state.username"
-            placeholder="ghost"
-            required
-          >
-          </b-form-input> 
-        </b-form-group>
-        <!-- First Name -->
-        <b-form-group
-          :state="state.first"
-          label="First Name"
-          label-for="first-input"
-          invalid-feedback="First name is required"
-        >
-          <b-form-input
-            id="first-input"
-            type="text"
-            v-model="name.first"
-            :state="state.first"
-            placeholder="Jon"
-            required
-          >
-          </b-form-input> 
-        </b-form-group>
-        <!-- Last Name  -->
-         <b-form-group
-          :state="state.last"
-          label="Last Name"
-          label-for="last-input"
-          invalid-feedback="Last name is required"
-        >
-          <b-form-input
-            id="last-input"
-            type="text"
-            v-model="name.last"
-            :state="state.last"
-            placeholder="Snow"
-            required
-          >
-          </b-form-input> 
-        </b-form-group>
-        <!-- Email -->
-        <b-form-group
-          :state="state.email"
-          label="Email Address"
-          label-for="email-input"
-          invalid-feedback="Email is required"
-        >
-          <b-form-input
-            id="email-input"
-            type="email"
-            v-model="email"
-            :state="state.email"
-            placeholder="stark@example.com"
-            required
-          >
-          </b-form-input> 
-        </b-form-group>
-        <!-- Password -->
-        <b-form-group
-          :state="state.password"
-          label="Password"
-          label-for="password-input"
-          invalid-feedback="Password is required"
-        >
-          <b-form-input
-            id="password-input"
-            type="password"
-            v-model="password"
-            :state="state.password"
-            placeholder="********"
-            v-on:input="passwordStrength()"
-            required
-          ></b-form-input>
-          <b-badge 
-            pill 
-            class="md-1"
-            :variant="passStrengthPillVariant"
-          >
-            Password Strength: 
-            {{passStrengthPillLabel}}
-            </b-badge>
-        </b-form-group>
-        <!-- Confirm Password -->
-        <b-form-group
-          :state="state.confirm"
-          label="Confirm Password"
-          label-for="confirmPassword-input"
-          invalid-feedback="Confirm Password is required"
-        >
-          <b-form-input
-            id="confirmPassword-input"
-            type="password"
-            v-model="confirmPassword"
-            :state="state.confirm"
-            placeholder="********"
-            required
-          >
-          </b-form-input> 
-        </b-form-group>
-        
-        <b-button type="submit" variant="success" @click.prevent="signup()" class=" btn-lg btn-block">Sign Up</b-button>
-        <b-alert variant="danger" :show="fail" fade @dismissed="fail=false" dismissible>
-          {{errorMessage}}
-        </b-alert>
-        <b-alert variant="success" :show="pass" fade @dismissed="pass=false" dismissible>
-          Succesful Registration!
-        </b-alert>
-        <p class="forgot-password text-right">
-          Already registered
-        <router-link :to="{name: 'login'}">sign in?</router-link>
-        </p>
-      </form>
-    </div>
-        <!-- <div class="form-group">
-          <label>First Name</label>
-          <input v-model="name.first" type="text" class="form-control form-control-lg"/>
+        <div>
+            <form>
+                
+                <!-- <h3 class="text-center">Create An Account</h3> -->
+                <!-- User Name -->
+                <b-form-group
+                :state="state.username"
+                label="Username"
+                label-for="user-input"
+                invalid-feedback="Username is required"
+                >
+                <b-form-input
+                    id="username-input"
+                    type="text"
+                    v-model="id"
+                    :state="state.username"
+                    placeholder="ghost"
+                    required
+                >
+                </b-form-input> 
+                </b-form-group>
+                <!-- First Name -->
+                <b-form-group
+                :state="state.first"
+                label="First Name"
+                label-for="first-input"
+                invalid-feedback="First name is required"
+                >
+                <b-form-input
+                    id="first-input"
+                    type="text"
+                    v-model="name.first"
+                    :state="state.first"
+                    placeholder="Jon"
+                    required
+                >
+                </b-form-input> 
+                </b-form-group>
+                <!-- Last Name  -->
+                <b-form-group
+                :state="state.last"
+                label="Last Name"
+                label-for="last-input"
+                invalid-feedback="Last name is required"
+                >
+                <b-form-input
+                    id="last-input"
+                    type="text"
+                    v-model="name.last"
+                    :state="state.last"
+                    placeholder="Snow"
+                    required
+                >
+                </b-form-input> 
+                </b-form-group>
+                <!-- Email -->
+                <b-form-group
+                :state="state.email"
+                label="Email Address"
+                label-for="email-input"
+                invalid-feedback="Email is required"
+                >
+                <b-form-input
+                    id="email-input"
+                    type="email"
+                    v-model="email"
+                    :state="state.email"
+                    placeholder="stark@example.com"
+                    required
+                >
+                </b-form-input> 
+                </b-form-group>
+                <!-- Password -->
+                <b-form-group
+                :state="state.password"
+                label="Password"
+                label-for="password-input"
+                invalid-feedback="Password is required"
+                >
+                <b-form-input
+                    id="password-input"
+                    type="password"
+                    v-model="password"
+                    :state="state.password"
+                    placeholder="********"
+                    v-on:input="passwordStrength()"
+                    required
+                ></b-form-input>
+                <b-badge 
+                    pill 
+                    class="md-1"
+                    :variant="passStrengthPillVariant"
+                >
+                    Password Strength: 
+                    {{passStrengthPillLabel}}
+                    </b-badge>
+                </b-form-group>
+                <!-- Confirm Password -->
+                <b-form-group
+                :state="state.confirm"
+                label="Confirm Password"
+                label-for="confirmPassword-input"
+                invalid-feedback="Confirm Password is required"
+                >
+                <b-form-input
+                    id="confirmPassword-input"
+                    type="password"
+                    v-model="confirmPassword"
+                    :state="state.confirm"
+                    placeholder="********"
+                    required
+                >
+                </b-form-input> 
+                </b-form-group>
+                
+                <b-button type="submit" variant="success" @click.prevent="signup()" class=" btn-lg btn-block">Sign Up</b-button>
+                <b-alert variant="danger" :show="fail" fade @dismissed="fail=false" dismissible>
+                {{errorMessage}}
+                </b-alert>
+                <b-alert variant="success" :show="pass" fade @dismissed="pass=false" dismissible>
+                {{successMessage}}
+                </b-alert>
+                <p class="forgot-password text-right">
+                Already registered
+                <router-link :to="{name: 'login'}">sign in?</router-link>
+                {{pass}}
+                </p>
+            </form>
         </div>
-                <div class="form-group">
-          <label>Last Name</label>
-          <input v-model="name.last" type="text" class="form-control form-control-lg"/>
-        </div> -->
-
     </div>
   </Signing>
 </template>
@@ -256,15 +248,17 @@ export default {
             .post('/register', postData)
             .then(response => {
               if (response.status == 200)
-                console.log('Successful registration ' + response.data.results)
-                this.$store.commit('user/setUserID', postData.id)
-                this.$store.commit('user/setLoggedIn', true)
-                this.$router.push('/home')
-                alertReset ()
+                console.log('Successful registration ')
+                console.log(response.data)
+                // this.$store.commit('user/setUserID', postData.id)
+                // this.$store.commit('user/setLoggedIn', true)
+                this.$router.push('/login')
+                successMessage = response.data.msg
+                this.pass = true
             })
             .catch((error) => {
                 if (error.response.status == 401) { 
-                    console.log(error.response)
+                    console.log(error)
                     this.errorMessage = error.response.data.error
                     this.fail = true
                     this.$store.commit('user/setLoggedIn', false)
