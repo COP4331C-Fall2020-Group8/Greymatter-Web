@@ -307,7 +307,13 @@ export default {
         home () {
             console.log("Heading to home")
             this.$router.push('/home')
-        }
+        },
+        logout () {
+        console.log("Signing out!")
+        this.$store.commit('user/setLoggedIn', false)
+        this.$store.commit('user/setUserID', -1)
+        this.$router.push('/login')
+      }
     },
     beforeMount(){
         this.setID = this.$route.params.setID;
