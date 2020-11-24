@@ -21,7 +21,6 @@
                 <p class="forgot-password text-right">
                 Nevermind, back to
                 <router-link :to="{name: 'login'}">sign in?</router-link>
-                {{pass}}
                 </p>
 
             <b-alert variant="danger" :show="fail" fade @dismissed="fail=false" dismissible>
