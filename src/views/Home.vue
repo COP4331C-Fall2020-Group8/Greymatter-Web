@@ -13,7 +13,8 @@
           <b-nav-item @click.prevent="logout()">Logout</b-nav-item>
         </b-navbar-nav>
       </b-navbar>
-      <b-row v-if="showingSearch">
+
+      <!-- <b-row v-if="showingSearch">
         <b-col cols="10">
           Results For: {{searchTerm}} 
         </b-col>
@@ -22,13 +23,29 @@
             Clear Search
           </b-button>
         </b-col>
-      </b-row>
+      </b-row> -->
+      <b-row class="bg-info" align-v="stretch">
+            <b-col cols="10" class="text-left">
+            </b-col>
+        </b-row>
+        <b-row v-if="showingSearch" class="bg-dark text-white">
+            <b-col cols="10">
+                <span class="set-sub-title ml-3">Results For: {{searchTerm}}</span>
+            </b-col>
+            <b-col cols="2">
+            <b-button @click="stopSearch">
+                Clear Search
+            </b-button>
+            </b-col>
+        </b-row>
       <div>
         <b-row>
             <b-col sm="12" md="6" lg="4" v-for="(topic,index) in topics" v-bind:key="index">
                 <standard-topic
                     :name="topic.name"
                     :category="topic.category"
+                    :nameState="topic.nameState"
+                    :catState="topic.catState"
                     :_id="topic._id"
                     :updateParent="receiveTopicUpdate"
                     :informParentDeleted ="receiveTopicDeletedNotification"
@@ -164,7 +181,6 @@ export default {
           this.showingSearch = true;
         }else{
           // TODO
-          console.log("400 error")
           console.log(response.data.results);
           this.topics = response.data.results;
         }
@@ -249,7 +265,8 @@ export default {
     },
     fetchCardsInSet(){
         var postData = {
-          user_id: this.$store.getters["user/user_log_id"],
+        //   user_id: this.$store.getters["user/user_log_id"],
+          set_id: this.setID,
           search: ""
         }
         axios

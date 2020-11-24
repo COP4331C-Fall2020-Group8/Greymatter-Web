@@ -68,7 +68,10 @@
           Don't have an account?
         <router-link :to="{name: 'signup'}">Sign up</router-link>
         {{fail}}
-        <b-button @click.prevent="forceLoginState()">forceLoginState</b-button>
+        <!-- <b-button @click.prevent="forceLoginState()">forceLoginState</b-button> -->
+        </p>
+        <p class="forgot-password text-right"> 
+        <router-link :to="{name: 'forgotpassword'}">Forgot Password?</router-link>
         </p>
     </div>
   </Sigining>

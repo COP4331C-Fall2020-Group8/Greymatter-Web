@@ -4,6 +4,9 @@ import Signup from '../views/Signup.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
 import SetViewer from '../views/SetViewer.vue'
+import ResetPassword from '../views/ResetPassword.vue'
+import ForgotPassword from '../views/ForgotPassword.vue'
+
 
 const { store } = require('../stores')
 
@@ -35,17 +38,19 @@ const routes = [
     props: true,
     component: SetViewer,
     meta: { requiresLogin: true }
+  },
+  {
+    path: '/forgotpassword',
+    name: 'forgotpassword',
+    component: ForgotPassword,
+    // meta: { requiresLogin: true }
+  },
+  {
+    path: '/resetPassword/:id/:token',
+    name: 'resetpassword',
+    component: ResetPassword,
+    // meta: { requiresLogin: true }
   }
-  //,
-  // {
-    // path: '/cardviewer',
-    // name: 'cardviewer',
-    // // route level code-splitting
-    // // this generates a separate chunk (about.[hash].js) for this route
-    // // which is lazy-loaded when the route is visited.
-    // // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    // component: CardViewer
-  // }
 ]
 
 const router = new VueRouter({

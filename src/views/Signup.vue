@@ -2,8 +2,7 @@
   <Signing>
     <div>
         <div>
-            <form>
-                
+            <form>                
                 <!-- <h3 class="text-center">Create An Account</h3> -->
                 <!-- User Name -->
                 <b-form-group
@@ -126,7 +125,6 @@
                 <p class="forgot-password text-right">
                 Already registered
                 <router-link :to="{name: 'login'}">sign in?</router-link>
-                {{pass}}
                 </p>
             </form>
         </div>
@@ -252,8 +250,8 @@ export default {
                 console.log(response.data)
                 // this.$store.commit('user/setUserID', postData.id)
                 // this.$store.commit('user/setLoggedIn', true)
-                this.$router.push('/login')
-                successMessage = response.data.msg
+                // this.$router.push('/login')
+                this.successMessage = response.data.msg
                 this.pass = true
             })
             .catch((error) => {

@@ -120,6 +120,15 @@
             </b-form-group>
             </form>
         </b-modal>
+        
+        <!-- <b-alert variant="danger" :show="fail" fade @dismissed="fail=false" dismissible>
+          {{errorMessage}}
+        </b-alert>
+        
+        <b-alert variant="success" :show="pass" fade @dismissed="pass=false" dismissible>
+          {{successMessage}}
+        </b-alert> -->
+    
     </div>
 </template>
 
@@ -154,7 +163,11 @@ export default {
                 back: null,
                 frontState: null,
                 backState: null
-            }
+            },
+            errorMessage: '',
+            successMessage: '',
+            fail: false,
+            pass: false
         }
     },
     methods: {
@@ -255,8 +268,10 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error.response)
                 // TODO
+                // this.errorMessage = error.response.data.error
+                // this.fail = true
             })
         },
         fetchCardsInSet(){

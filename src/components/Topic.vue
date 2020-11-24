@@ -102,6 +102,14 @@ export default {
         type: String,
         default: () =>{ return null; }
         },
+        nameState: {
+        type: String,
+        default: () =>{ return null; }
+        },
+        catState: {
+        type: String,
+        default: () =>{ return null; }
+        },
         _id: {
         type: String,
         default: () =>{ return null; }
