@@ -3,7 +3,7 @@
     <div>
         <div>
             <form>                
-                <!-- <h3 class="text-center">Create An Account</h3> -->
+                <h4 class="text-center">Create An Account</h4>
                 <!-- User Name -->
                 <b-form-group
                 :state="state.username"

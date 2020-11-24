@@ -3,7 +3,7 @@
     <div>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-col>
-        <b-input-group class="mb-3">
+        <b-input-group class="mt-4">
           <b-input-group-prepend is-text>
             <b-icon icon="person-fill"></b-icon>
           </b-input-group-prepend>
@@ -25,7 +25,7 @@
           </b-form-input>
         </b-form-group> -->
         
-        <b-input-group class="mb-3">
+        <b-input-group class="mt-4">
           <b-input-group-prepend is-text>
             <b-icon-lock-fill> </b-icon-lock-fill>
           </b-input-group-prepend>
@@ -51,7 +51,7 @@
           </b-form-input>
         </b-form-group> -->
       </form>
-        <b-button type="submit" variant="success" @click.prevent.stop="login()" class="mb-3 btn-lg btn-block">Sign In</b-button>
+        <b-button type="submit" variant="success" @click.prevent.stop="login()" class="mt-3 btn-lg btn-block">Sign In</b-button>
         <b-alert 
         variant="danger" 
         dismissible 
@@ -67,10 +67,9 @@
         <p class="forgot-password text-right">
           Don't have an account?
         <router-link :to="{name: 'signup'}">Sign up</router-link>
-        {{fail}}
         <!-- <b-button @click.prevent="forceLoginState()">forceLoginState</b-button> -->
         </p>
-        <p class="forgot-password text-right"> 
+        <p class="forgot-password text-center"> 
         <router-link :to="{name: 'forgotpassword'}">Forgot Password?</router-link>
         </p>
     </div>
