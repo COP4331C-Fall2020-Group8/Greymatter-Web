@@ -73,7 +73,7 @@ export default {
             if (this.newPassword === this.confirmPassword){
                     var postData = {
                         id: this.user_id,
-                        password: this.password,
+                        password: this.newPassword,
                         token: this.token
                 }
                 axios
