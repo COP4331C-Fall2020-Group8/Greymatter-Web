@@ -99,6 +99,19 @@ export default {
                         this.errorMessage = error.response.data.error
                         this.fail = true
                     }
+                    if (error.response) {
+                        console.log('response exists')
+                        console.log(error.response)
+                    }
+                    if (error.request) {
+                        console.log("request exists")
+                        console.log(error.request)
+                    } else {
+                        console.log("Nothing exists")
+                        console.log(error)
+                        this.errorMessage = error
+                        this.fail = true
+                    }
                 })
             }
         }
